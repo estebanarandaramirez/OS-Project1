@@ -6,4 +6,19 @@ void main(int argc, char** argv) {
   printf("0. whoami : Prints out the result of the whoamicommand\n");
   printf("1. last : Prints out the result of the last command \n");
   printf("2. ls : Prints out the result of a listing on a user-specified path)\n");
+  printf("Option?: ");
+
+  if (argc > 1){
+    printf("Too many inputs. Try again");
+  }
+  
+  statistics();
 }
+
+void statistics(){
+  printf("Elapsed Time: ");
+  printf("Page Faults: ");
+  printf("Page Faults (reclaimed): ");
+  printf("\n");
+}
+
