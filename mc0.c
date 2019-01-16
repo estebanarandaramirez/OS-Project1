@@ -1,7 +1,6 @@
-#include <iostream>
 #include <stdio.h>
 
-int main(int argc, char** argv) {
+void main(int argc, char** argv) {
   printf("===== Mid-Day Commander, v0 ===== \n");
   printf("G’day, Commander! What command would you like to run? \n");
   printf("0. whoami : Prints out the result of the whoamicommand\n");
