@@ -1,6 +1,14 @@
 #include <stdio.h>
 
-void main(int argc, char** argv) {
+void statistics();
+void whoAmI();
+void last();
+void ls();
+
+void main(int argc, char *argv[]) {
+  int input;
+
+  //initial menu
   printf("===== Mid-Day Commander, v0 ===== \n");
   printf("G’day, Commander! What command would you like to run? \n");
   printf("0. whoami : Prints out the result of the whoamicommand\n");
@@ -8,17 +16,53 @@ void main(int argc, char** argv) {
   printf("2. ls : Prints out the result of a listing on a user-specified path)\n");
   printf("Option?: ");
 
-  if (argc > 1){
-    printf("Too many inputs. Try again");
+  scanf("%d", &input);
+
+  //error for invalid input
+  if (input > 2 || input < 0){
+    printf("Error! That is an invalid input. Please select one of the options. \n");
   }
-  
+
+  //codes to run based on input
+  if(input == 0){
+    printf("Option 0 \n");
+    whoAmI();
+  }
+
+  if(input == 1){
+    printf("Option 1 \n");
+    last();
+  }
+
+  if(input == 2){
+    printf("Option 2 \n");
+    ls();
+  }
+
+  //run stats everytime
   statistics();
 }
 
 void statistics(){
-  printf("Elapsed Time: ");
-  printf("Page Faults: ");
-  printf("Page Faults (reclaimed): ");
+  printf("-- Statistics ---\n");
+  printf("Elapsed Time: \n");
+  printf("Page Faults: \n");
+  printf("Page Faults (reclaimed): \n");
   printf("\n");
 }
 
+//run because option 0
+void whoAmI(){
+  printf("\n-- Who Am I? -- \n");
+  //fork();
+}
+
+//run because option1
+void last(){
+  printf("\n-- Last Logins --\n");
+}
+
+//run because option2
+void ls(){
+  printf("\n-- Directory Listing --\n");
+}
