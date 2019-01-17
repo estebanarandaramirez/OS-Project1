@@ -1,11 +1,17 @@
 #include <stdio.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/wait.h>
+
 
 void statistics();
 void whoAmI();
 void last();
 void ls();
 
-void main(int argc, char *argv[]) {
+int main(int argc, char *argv[]) {
   int input;
 
   //initial menu
@@ -25,7 +31,6 @@ void main(int argc, char *argv[]) {
 
   //codes to run based on input
   if(input == 0){
-    printf("Option 0 \n");
     whoAmI();
   }
 
@@ -38,13 +43,10 @@ void main(int argc, char *argv[]) {
     printf("Option 2 \n");
     ls();
   }
-
-  //run stats everytime
-  statistics();
 }
 
 void statistics(){
-  printf("-- Statistics ---\n");
+  printf("\n-- Statistics ---\n");
   printf("Elapsed Time: \n");
   printf("Page Faults: \n");
   printf("Page Faults (reclaimed): \n");
@@ -54,7 +56,24 @@ void statistics(){
 //run because option 0
 void whoAmI(){
   printf("\n-- Who Am I? -- \n");
-  //fork();
+  int pid = fork();
+  char* whoamiString = "whoami";
+  char* list [2];
+  list[0] = whoamiString;
+  list[1] = NULL;
+
+
+    if(pid != 0){
+      wait(&pid);
+    }
+    else{
+      execvp("whoami", list);
+    }
+    statistics();
+
+
+
+
 }
 
 //run because option1
