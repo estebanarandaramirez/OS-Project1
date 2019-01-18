@@ -7,13 +7,15 @@
 #include <sys/time.h>
 #include <sys/resource.h>
 
-void statistics();
+void statistics(float time);
 void whoAmI();
 void last();
 void ls();
 
 //Global Variables
 long prevFaults = 0, prevReclaims = 0;
+struct timeval start, stop;
+double time;
 
 int main(int argc, char *argv[]) {
 int counter = 0;
@@ -55,7 +57,7 @@ int counter = 0;
   }
 }
 
-void statistics(){
+void statistics(float time){
   struct rusage usage;
   long faults, reclaims;
 
@@ -68,7 +70,7 @@ void statistics(){
 
   //Print statistics
   printf("\n-- Statistics ---\n");
-  printf("Elapsed Time: \n");
+  printf("Elapsed Time: %f %s\n", time, " milliseconds");
   printf("Page Faults: %li\n", faults);
   printf("Page Faults (reclaimed): %li\n", reclaims);
   printf("\n");
@@ -76,6 +78,7 @@ void statistics(){
 
 //run because option 0
 void whoAmI(){
+  gettimeofday(&start, NULL);
   printf("\n-- Who Am I? -- \n");
   int pid = fork();
   char* whoamiString = "whoami";
@@ -89,17 +92,19 @@ void whoAmI(){
     else{
       execvp("whoami", list);
     }
-    statistics();
+  gettimeofday(&stop, NULL);
+  time = (float) ((stop.tv_sec - start.tv_sec) * 1000 + (stop.tv_usec - stop.tv_usec) / 1000);
+  statistics(time);
 }
 
 //run because option1
 void last(){
   printf("\n-- Last Logins --\n");
-  statistics();
+  statistics(time);
 }
 
 //run because option2
 void ls(){
   printf("\n-- Directory Listing --\n");
-  statistics();
+  statistics(time);
 }
