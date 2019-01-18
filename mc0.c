@@ -70,11 +70,11 @@ void statistics(){
   //Calculate elapsed time in milliseconds
   float secs = (float)(stop.tv_sec - start.tv_sec) * 1000;
   float micros = (float)(stop.tv_usec - start.tv_usec) / 1000;
-  float millis = secs + micros;
+  float time = secs + micros; //time in milliseconds
 
   //Print statistics
   printf("\n-- Statistics ---\n");
-  printf("Elapsed Time: %f %s\n", millis, " milliseconds");
+  printf("Elapsed Time: %f %s\n", time, " milliseconds");
   printf("Page Faults: %li\n", faults);
   printf("Page Faults (reclaimed): %li\n", reclaims);
   printf("\n");
@@ -102,12 +102,16 @@ void whoAmI(){
 
 //run because option1
 void last(){
+  gettimeofday(&start, NULL);
   printf("\n-- Last Logins --\n");
+  gettimeofday(&stop, NULL);
   statistics();
 }
 
 //run because option2
 void ls(){
+  gettimeofday(&start, NULL);
   printf("\n-- Directory Listing --\n");
+  gettimeofday(&stop, NULL);
   statistics();
 }
