@@ -104,6 +104,18 @@ void whoAmI(){
 void last(){
   gettimeofday(&start, NULL);
   printf("\n-- Last Logins --\n");
+  int pid = fork();
+  char* lastString = "last";
+  char* list [2];
+  list[0] = lastString;
+  list[1] = NULL;
+  
+  if(pid != 0){
+    wait(&pid);
+  }
+  else{
+    execvp("last", list);
+  }
   gettimeofday(&stop, NULL);
   statistics();
 }
