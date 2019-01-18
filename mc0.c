@@ -124,6 +124,23 @@ void last(){
 void ls(){
   gettimeofday(&start, NULL);
   printf("\n-- Directory Listing --\n");
+  printf("\nArguments?:\n");
+  //scanf("%d", &input);
+  printf("\nPath?:\n");
+  //scanf("%d", &input);
+  int pid = fork();
+  char* lsString = "ls";
+  char* list [2];
+  list[0] = lsString;
+  list[1] = NULL;
+
+
+    if(pid != 0){
+      wait(&pid);
+    }
+    else{
+      execvp("ls", list);
+    }
   gettimeofday(&stop, NULL);
   statistics();
 }
