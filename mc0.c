@@ -34,7 +34,7 @@ int main(int argc, char *argv[]) {
     counter++;
     int eof = scanf("%d", &input);
     if(eof == -1){
-      return;
+      return(0);
     }
 
     //error for invalid input
@@ -127,24 +127,44 @@ void last(){
 //run because option2
 void ls(){
   gettimeofday(&start, NULL);
-  printf("\n-- Directory Listing --\n");
-  printf("\nArguments?:\n");
-  //scanf("%d", &input);
-  printf("\nPath?:\n");
-  //scanf("%d", &input);
-  int pid = fork();
+  char argInput[570];
+  char pathInput[540];
   char* lsString = "ls";
-  char* list [2];
+  char* list [4];
   list[0] = lsString;
   list[1] = NULL;
+  list[2] = NULL;
+  list[3] = NULL;
+  printf("\n-- Directory Listing --\n");
 
 
-    if(pid != 0){
-      wait(&pid);
-    }
-    else{
-      execvp("ls", list);
-    }
+  printf("\nArguments?:");
+  getchar();
+  fgets(argInput, 550, stdin);
+  if(strcmp("\n",argInput) != 0){
+    list[1] = argInput;
+  }
+  if(argInput[strlen(argInput) - 1] == '\n'){
+    argInput[strlen(argInput) - 1] = '\0';
+  }
+
+  printf("Path?:");
+  //lol dont know why i cant have it but it causes me so many fucking headaches getchar();
+  fgets(pathInput, 520, stdin);
+  if(strcmp("\n",pathInput) != 0){
+    list[2] = pathInput;
+  }
+  if(pathInput[strlen(pathInput) - 1] == '\n'){
+    pathInput[strlen(pathInput) - 1] = '\0';
+  }
+  int pid = fork();
+
+  if(pid != 0){
+    wait(&pid);
+  }
+  else{
+    execvp("ls", list);
+  }
   gettimeofday(&stop, NULL);
   statistics();
 }
