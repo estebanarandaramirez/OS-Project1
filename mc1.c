@@ -45,40 +45,41 @@ int main() {
     fgets(input, MAX, stdin);
     counter++;
 
-    printf("%s\n", input);
+    char command = input[0];
+    printf("%c\n", command);
 
     //error for invalid input
-    if (input != 10 || input > 50 || input < 48 || input != 97 || input != 99 || input != 101 || input != 112){
+    if (command != '0' || command != '1' || command != '2' || command != 'a' || command != 'c' || command != 'e' || command != 'p'){
       printf("\nError! That is an invalid input. Please select one of the options. \n\n");
     }
 
     //codes to run based on input
-    if(input == 48){
+    if(command == '0'){
       whoAmI();
     }
 
-    if(input == 49){
+    if(command == '1'){
       last();
     }
 
-    if(input == 50){
+    if(command == '2'){
       ls();
     }
 
-    if(input == 97){
+    if(command == 'a'){
       printf("HI");
       a();
     }
 
-    if(input == 99){
+    if(command == 'c'){
       c();
     }
 
-    if(input == 101){
+    if(command == 'e'){
       e();
     }
 
-    if(input == 112){
+    if(command == 'p'){
       p();
     }
 
