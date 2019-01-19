@@ -17,7 +17,7 @@ long prevFaults = 0, prevReclaims = 0;
 struct timeval start, stop;
 
 int main(int argc, char *argv[]) {
-int counter = 0;
+  int counter = 0;
   while(1){
     int input;
 
@@ -32,25 +32,29 @@ int counter = 0;
     printf("Option?: ");
 
     counter++;
-    scanf("%d", &input);
+    int eof = scanf("%d", &input);
+    if(eof == -1){
+      return;
+    }
 
     //error for invalid input
     if (input > 2 || input < 0){
-      printf("Error! That is an invalid input. Please select one of the options. \n");
+      printf("\nError! That is an invalid input. Please select one of the options. \n\n");
     }
 
     //codes to run based on input
     if(input == 0){
+      printf("\nOption 0");
       whoAmI();
     }
 
     if(input == 1){
-      printf("Option 1 \n");
+      printf("\nOption 1");
       last();
     }
 
     if(input == 2){
-      printf("Option 2 \n");
+      printf("\nOption 2");
       ls();
     }
   }
@@ -109,7 +113,7 @@ void last(){
   char* list [2];
   list[0] = lastString;
   list[1] = NULL;
-  
+
   if(pid != 0){
     wait(&pid);
   }
