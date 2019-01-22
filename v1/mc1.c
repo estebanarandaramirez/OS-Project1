@@ -67,7 +67,6 @@ int main() {
     }
 
     if(command == 'a'){
-      printf("HI");
       a();
     }
 
@@ -164,7 +163,6 @@ void ls(){
   list[3] = NULL;
   printf("\n-- Directory Listing --\n");
 
-
   printf("Arguments?:");
   getchar();
   fgets(argInput, 550, stdin);
@@ -201,7 +199,7 @@ void a(){
   gettimeofday(&start, NULL);
   printf("\n-- Add a command --\n");
   printf("\nCommand to add?:");
-  
+
   printf("\nOkay, added with ID __!\n");
 
   gettimeofday(&stop, NULL);
@@ -211,8 +209,23 @@ void a(){
 //change directory
 void c(){
   gettimeofday(&start, NULL);
+
+  int wasSuccess = -1;
+  char pathInput[540];
+
+  char* list [2];
+  list[0] = pathInput;
+  list[1] = NULL;
+
   printf("\n-- Change Directory --\n");
-  printf("\nNew Directory?: /");
+  printf("\nNew Directory?: ");
+  fgets(pathInput, 520, stdin);
+
+  wasSuccess = chdir(pathInput);
+
+  if (wasSuccess == -1){
+    printf("Error, was unable to change directories successfully. \n");
+  }
 
   gettimeofday(&stop, NULL);
   statistics();
@@ -222,9 +235,9 @@ void c(){
 void e(){
   gettimeofday(&start, NULL);
   printf("\n  Logging you out, Commander.");
-  
+
   gettimeofday(&stop, NULL);
-  
+
   statistics();
 }
 
@@ -233,7 +246,7 @@ void p(){
   gettimeofday(&start, NULL);
   printf("\n-- Current Directory --\n");
   printf("\nDirectory: __");
-  
+
   gettimeofday(&stop, NULL);
   statistics();
 }
