@@ -2,7 +2,7 @@ CS 3013: Operating Systems (C19)
 Shreeja Bhattacharjee (sbhattacharjee), Esteban Ramirez (earandaramirez)
 Project 1 (Checkpoint)
 
-This code was written in C. As of right now, it includes the features specified for Phase 1.
+This code was written in C. As of right now, it includes the features specified for Phase 1 and Phase 2 (in progress). Phase 1 materials are located in v0 and Phase 2 materials are located in v1.
 
 To run the program go to the directory with the files, and write "make" in the command line to build. Then use "./mc0" to run. Typing "make clean" cleans it up.
 
