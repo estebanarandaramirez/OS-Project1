@@ -138,7 +138,7 @@ void ls(){
   printf("\n-- Directory Listing --\n");
 
 
-  printf("\nArguments?:");
+  printf("Arguments?:");
   getchar();
   fgets(argInput, 550, stdin);
   if(strcmp("\n",argInput) != 0){
