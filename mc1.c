@@ -153,7 +153,7 @@ void last(){
 
 //run because option2
 void ls(){
-   gettimeofday(&start, NULL);
+  gettimeofday(&start, NULL);
   char argInput[570];
   char pathInput[540];
   char* lsString = "ls";
@@ -176,7 +176,7 @@ void ls(){
   }
 
   printf("Path?:");
-  //lol dont know why i cant have it but it causes me so many fucking headaches getchar();
+  //lol dont know why i cant have it but it causes me so many fucking headaches: getchar();
   fgets(pathInput, 520, stdin);
   if(strcmp("\n",pathInput) != 0){
     list[2] = pathInput;
@@ -196,26 +196,44 @@ void ls(){
   statistics();
 }
 
+//add command
 void a(){
   gettimeofday(&start, NULL);
+  printf("\n-- Add a command --\n");
+  printf("\nCommand to add?:");
+  
+  printf("\nOkay, added with ID __!\n");
+
   gettimeofday(&stop, NULL);
   statistics();
 }
 
+//change directory
 void c(){
   gettimeofday(&start, NULL);
+  printf("\n-- Change Directory --\n");
+  printf("\nNew Directory?: /");
+
   gettimeofday(&stop, NULL);
   statistics();
 }
 
+//exits
 void e(){
   gettimeofday(&start, NULL);
+  printf("\n  Logging you out, Commander.");
+  
   gettimeofday(&stop, NULL);
+  
   statistics();
 }
 
+//print directory
 void p(){
   gettimeofday(&start, NULL);
+  printf("\n-- Current Directory --\n");
+  printf("\nDirectory: __");
+  
   gettimeofday(&stop, NULL);
   statistics();
 }
