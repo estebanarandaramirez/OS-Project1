@@ -25,6 +25,8 @@ void freeCommand();
 long prevFaults = 0, prevReclaims = 0;
 struct timeval start, stop;
 struct command *head = NULL;
+int commandNum = 3;
+
 
 struct command {
   int comNum;
