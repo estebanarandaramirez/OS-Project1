@@ -17,7 +17,7 @@ void e();
 void p();
 
 //Constant
-#define MAX 100
+#define MAX 128 //Max characters
 
 //Global Variables
 long prevFaults = 0, prevReclaims = 0;
@@ -44,43 +44,67 @@ int main() {
 
     fgets(input, MAX, stdin);
     counter++;
-
     char command = input[0];
-    printf("%c\n", command);
 
     //error for invalid input
-    if (command != '0' || command != '1' || command != '2' || command != 'a' || command != 'c' || command != 'e' || command != 'p'){
-      printf("\nError! That is an invalid input. Please select one of the options. \n\n");
+    // if (command != '0' /*|| command != '1' || command != '2' || command != 'a' || command != 'c' || command != 'e' || command != 'p'*/){
+    //   printf("\nError! That is an invalid input. Please select one of the options. \n\n");
+    // }
+
+    switch (command) {
+      case '0':
+        whoAmI();
+        break;
+      case '1':
+        last();
+        break;
+      case '2':
+        ls();
+        break;
+      case 'a':
+        a();
+        break;
+      case 'c':
+        c();
+        break;
+      case 'e':
+        e();
+        break;
+      case 'p':
+        p();
+        break;
+      default:
+        printf("\nError! That is an invalid input. Please select one of the options. \n\n");
     }
 
     //codes to run based on input
-    if(command == '0'){
-      whoAmI();
-    }
-
-    if(command == '1'){
-      last();
-    }
-
-    if(command == '2'){
-      ls();
-    }
-
-    if(command == 'a'){
-      a();
-    }
-
-    if(command == 'c'){
-      c();
-    }
-
-    if(command == 'e'){
-      e();
-    }
-
-    if(command == 'p'){
-      p();
-    }
+    // if(command == '0'){
+    //   whoAmI();
+    // }
+    //
+    // if(command == '1'){
+    //   last();
+    // }
+    //
+    // if(command == '2'){
+    //   ls();
+    // }
+    //
+    // if(command == 'a'){
+    //   a();
+    // }
+    //
+    // if(command == 'c'){
+    //   c();
+    // }
+    //
+    // if(command == 'e'){
+    //   e();
+    // }
+    //
+    // if(command == 'p'){
+    //   p();
+    // }
 
     //return(0);
   }
@@ -233,20 +257,22 @@ void c(){
 
 //exits
 void e(){
-  gettimeofday(&start, NULL);
-  printf("\n  Logging you out, Commander.");
-
-  gettimeofday(&stop, NULL);
-
-  statistics();
+  //gettimeofday(&start, NULL);
+  printf("Logging you out, Commander.\n");
+  exit(0);
+  //gettimeofday(&stop, NULL);
+  //statistics();
 }
 
 //print directory
 void p(){
   gettimeofday(&start, NULL);
   printf("\n-- Current Directory --\n");
-  printf("\nDirectory: __");
-
+  printf("\nDirectory: ");
+  char cwd[MAX];
+  if(getcwd(cwd,sizeof(cwd)) != NULL){
+    printf("%s\n", cwd);
+  }
   gettimeofday(&stop, NULL);
   statistics();
 }
