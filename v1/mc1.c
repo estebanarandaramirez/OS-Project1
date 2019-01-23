@@ -15,6 +15,8 @@ void a();
 void c();
 void e();
 void p();
+void makeCommand(int num, char *name, char *descrip);
+void freeCommand();
 
 //Constant
 #define MAX 128 //Max characters
@@ -22,14 +24,48 @@ void p();
 //Global Variables
 long prevFaults = 0, prevReclaims = 0;
 struct timeval start, stop;
+struct command *head = NULL;
+
+struct command {
+  int comNum;
+  char *comName;
+  char *comDescrip;
+  struct command *next;
+};
 
 int main() {
   int counter = 0;
   while(1){
     char input[MAX];
+    
+    makeCommand(0,"whoami", "Prints out the result of the whoamicommand");
+    makeCommand(1,"last", "Prints out the result of the last command");
+    makeCommand(2,"ls", "Prints out the result of the ls command");
 
     if(counter == 0){printf("===== Mid-Day Commander, v1 ===== \n");}
     printf("G’day, Commander! What command would you like to run? \n");
+    
+    //new stuff
+    struct command *commandTemp;
+    commandTemp = (struct command*)malloc(sizeof(struct command));
+    commandTemp = head;
+    printf("%s\n", commandTemp->comDescrip);
+    printf("%s\n", head->comDescrip);
+    if(head->next == NULL){
+      printf("%s\n", commandTemp->next->comDescrip);
+    }
+
+
+    for (int i = 0; i < commandNum; i++){
+      printf("%s\n", commandTemp->comName);
+      printf("   %-10d%s %s %s", commandTemp->comNum, ".", commandTemp->comName, ": ");
+      printf("%s",commandTemp->comDescrip);
+      printf("\n");
+      commandTemp = commandTemp->next;
+    }
+    free(commandTemp);
+    
+    //old print statements
     printf("   %-10s %s", "0. whoami", ":");
     printf(" Prints out the result of the whoamicommand\n");
     printf("   %-10s %s", "1. last", ":");
@@ -108,6 +144,7 @@ int main() {
 
     //return(0);
   }
+  freeCommand();
 }
 
 void statistics(){
@@ -218,11 +255,61 @@ void ls(){
   statistics();
 }
 
+//helper make command and add to list
+void makeCommand(int num, char *name, char *descrip){
+  struct command *commandNew;
+  commandNew= (struct command*)malloc(sizeof(struct command));
+  commandNew->comNum = num;
+  commandNew->comName = name;
+  //printf("%s\n", name );
+  //printf("%s\n", commandNew-> comName );
+  commandNew->comDescrip = descrip;
+  commandNew->next = NULL;
+
+  if (head == NULL){
+    head = commandNew;
+    printf("i was head");
+  }
+  else {
+    struct command *commandTemp;
+    commandTemp= (struct command*)malloc(sizeof(struct command));
+    commandTemp = head;
+    while (commandTemp->next != NULL){
+      commandTemp = commandTemp->next;
+      printf("%s\n", commandTemp->comDescrip);
+      printf("i was here");
+    }
+    commandTemp->next = commandNew;
+    free(commandTemp);
+  }
+}
+
+//remove all commands from list
+void freeCommand(){
+  while(head->next != NULL){
+    struct command *commandTemp;
+    commandTemp= (struct command*)malloc(sizeof(struct command));
+    commandTemp = head;
+    head = commandTemp->next;
+    free(commandTemp);
+  }
+
+  free(head);
+}
+
 //add command
 void a(){
   gettimeofday(&start, NULL);
+  char commandInput[540];
   printf("\n-- Add a command --\n");
   printf("\nCommand to add?:");
+
+  fgets(commandInput, 520, stdin);
+
+  //add command and increment number of commands
+  makeCommand(commandNum,commandInput, "User added command");
+  commandNum++;
+
 
   printf("\nOkay, added with ID __!\n");
 
