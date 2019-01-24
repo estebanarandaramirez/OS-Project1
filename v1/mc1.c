@@ -17,7 +17,7 @@ void e();
 void p();
 void makeCommand(int num, char *name, char *descrip);
 void freeCommand();
-void addedCommands(int intCommand);
+void addedCommands();
 
 //Constant
 #define MAX 128 //Max characters
@@ -80,7 +80,7 @@ int main() {
     //   printf("\nError! That is an invalid input. Please select one of the options. \n\n");
     // }
     int commandAsInt = command - '0';
-    if((2 < commandAsInt) && (commandAsInt <= commandNum)){
+    if((2 < commandAsInt) && (commandAsInt <= commandNum -1)){
       addedCommands(commandAsInt);
     }
     else{
@@ -257,6 +257,9 @@ void ls(){
 void makeCommand(int num, char *name, char *descrip){
   struct command *commandNew;
   commandNew= (struct command*)malloc(sizeof(struct command));
+  commandNew->comName = (char*)malloc(500*sizeof(char));
+  commandNew->comDescrip = (char*)malloc(500*sizeof(char));
+
   commandNew->comNum = num;
   commandNew->comName = name;
   //printf("%s\n", name );
@@ -296,12 +299,16 @@ void freeCommand(){
 //add command
 void a(){
   gettimeofday(&start, NULL);
-  char commandInput[540];
+  //char commandInput[540];
+  char *commandInput;
+  commandInput= (char*)malloc(500*sizeof(char));
+
   printf("\n-- Add a command --\n");
   printf("Command to add?: ");
 
   fgets(commandInput, 520, stdin);
   strtok(commandInput, "\n");
+  //commandInput[539] = '\0';
 
   //add command and increment number of commands
   makeCommand(commandNum,commandInput, "User added command");
@@ -314,41 +321,50 @@ void a(){
 }
 
 //to run added command
-void addedCommands(int intCommand){
+void addedCommands(){
   gettimeofday(&start, NULL);
-  char *commandInput;
 
-  //find the right commands
   struct command *tempCommand;
-  tempCommand = (struct command*)malloc(sizeof(struct command));
+  //tempCommand = (struct command*)malloc(sizeof(struct command));
   tempCommand = head;
 
   int j = 0;
+
   while(j < commandNum -1){
     tempCommand = tempCommand->next;
     j++;
   }
-  commandInput = tempCommand->comName;
-  printf("-- Command: %s --\n", commandInput);
+
+  printf("-- Command: %s --\n", tempCommand->comName);
+
+  char *toBeEaten = (char*)malloc(500*sizeof(char));
+  toBeEaten = strdup(tempCommand->comName);
+  char *list [80];
+  char *tokenizedString = (char*)malloc(500*sizeof(char));
+
+  tokenizedString = strtok(toBeEaten, " ");
+  list[0] = tokenizedString;
+  int i = 1;
+
+  while(tokenizedString != NULL){
+    tokenizedString = strtok(NULL, " ");
+    list[i] = tokenizedString;
+    i++;
+  }
+  list[79] = NULL;
+
+  int status;
   int pid = fork();
-  char* thisString = commandInput;
-  char* list [2];
-  printf("-- Command: %s --\n", commandInput);
-  printf("-- Differentttttt Command: %s --\n", tempCommand->comName);
 
-
-  list[0] = thisString;
-  list[1] = NULL;
-  printf("-- Command: %s --\n", commandInput);
-
-    if(pid != 0){
-      wait(&pid);
-      printf("meeueuuuu\n" );
-    }
-    else{
-      execvp(commandInput, list);
-      printf("ahhhhhh\n %s", commandInput );
-    }
+  if(pid < 0){
+    printf("There's an error.\n");
+  }
+  else if(pid == 0){
+    execvp(list[0], list);
+  }
+  else{
+    pid = wait(&status);
+  }
   gettimeofday(&stop, NULL);
   statistics();
 
