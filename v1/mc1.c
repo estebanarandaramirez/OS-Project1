@@ -316,7 +316,7 @@ void a(){
 //to run added command
 void addedCommands(int intCommand){
   gettimeofday(&start, NULL);
-  const char *commandInput;
+  char *commandInput;
 
   //find the right commands
   struct command *tempCommand;
@@ -331,7 +331,7 @@ void addedCommands(int intCommand){
   commandInput = tempCommand->comName;
   printf("-- Command: %s --\n", commandInput);
   int pid = fork();
-  const char* thisString = commandInput;
+  char* thisString = commandInput;
   char* list [2];
   printf("-- Command: %s --\n", commandInput);
   printf("-- Differentttttt Command: %s --\n", tempCommand->comName);
