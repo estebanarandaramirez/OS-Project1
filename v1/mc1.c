@@ -52,7 +52,7 @@ int main() {
     commandTemp = head;
 
     for (int i = 0; i < commandNum; i++){
-      printf("   %d%s %-10s %s", commandTemp->comNum, ".", commandTemp->comName, ": ");
+      printf("   %d%s %-7s %s", commandTemp->comNum, ".", commandTemp->comName, ": ");
       printf("%s",commandTemp->comDescrip);
       printf("\n");
       commandTemp = commandTemp->next;
