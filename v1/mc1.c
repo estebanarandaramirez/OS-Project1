@@ -17,6 +17,7 @@ void e();
 void p();
 void makeCommand(int num, char *name, char *descrip);
 void freeCommand();
+void addedCommands(int intCommand);
 
 //Constant
 #define MAX 128 //Max characters
@@ -27,7 +28,6 @@ struct timeval start, stop;
 struct command *head = NULL;
 int commandNum = 3;
 
-
 struct command {
   int comNum;
   char *comName;
@@ -37,43 +37,34 @@ struct command {
 
 int main() {
   int counter = 0;
+  makeCommand(0,"whoami", "Prints out the result of the whoamicommand");
+  makeCommand(1,"last", "Prints out the result of the last command");
+  makeCommand(2,"ls", "Prints out the result of a listing on a user-specified path");
   while(1){
     char input[MAX];
-    
-    makeCommand(0,"whoami", "Prints out the result of the whoamicommand");
-    makeCommand(1,"last", "Prints out the result of the last command");
-    makeCommand(2,"ls", "Prints out the result of the ls command");
 
     if(counter == 0){printf("===== Mid-Day Commander, v1 ===== \n");}
     printf("G’day, Commander! What command would you like to run? \n");
-    
+    //pointers
     //new stuff
     struct command *commandTemp;
     commandTemp = (struct command*)malloc(sizeof(struct command));
     commandTemp = head;
-    printf("%s\n", commandTemp->comDescrip);
-    printf("%s\n", head->comDescrip);
-    if(head->next == NULL){
-      printf("%s\n", commandTemp->next->comDescrip);
-    }
-
 
     for (int i = 0; i < commandNum; i++){
-      printf("%s\n", commandTemp->comName);
-      printf("   %-10d%s %s %s", commandTemp->comNum, ".", commandTemp->comName, ": ");
+      printf("   %d%s %-10s %s", commandTemp->comNum, ".", commandTemp->comName, ": ");
       printf("%s",commandTemp->comDescrip);
       printf("\n");
       commandTemp = commandTemp->next;
     }
     free(commandTemp);
-    
-    //old print statements
-    printf("   %-10s %s", "0. whoami", ":");
-    printf(" Prints out the result of the whoamicommand\n");
-    printf("   %-10s %s", "1. last", ":");
-    printf(" Prints out the result of the last command \n");
+
+
+    //old statements
+    /*
     printf("   %-10s %s", "2. ls", ":");
     printf(" Prints out the result of a listing on a user-specified path\n");
+    */
     printf("   a. add command : Adds a new command to the menu\n");
     printf("   c. change directory : Changes process working directory\n");
     printf("   e. exit : Leave Mid-Day Commander\n");
@@ -88,31 +79,36 @@ int main() {
     // if (command != '0' /*|| command != '1' || command != '2' || command != 'a' || command != 'c' || command != 'e' || command != 'p'*/){
     //   printf("\nError! That is an invalid input. Please select one of the options. \n\n");
     // }
-
-    switch (command) {
-      case '0':
-        whoAmI();
-        break;
-      case '1':
-        last();
-        break;
-      case '2':
-        ls();
-        break;
-      case 'a':
-        a();
-        break;
-      case 'c':
-        c();
-        break;
-      case 'e':
-        e();
-        break;
-      case 'p':
-        p();
-        break;
-      default:
-        printf("\nError! That is an invalid input. Please select one of the options. \n\n");
+    int commandAsInt = command - '0';
+    if((2 < commandAsInt) && (commandAsInt <= commandNum)){
+      addedCommands(commandAsInt);
+    }
+    else{
+      switch (command) {
+        case '0':
+          whoAmI();
+          break;
+        case '1':
+          last();
+          break;
+        case '2':
+          ls();
+          break;
+        case 'a':
+          a();
+          break;
+        case 'c':
+          c();
+          break;
+        case 'e':
+          e();
+          break;
+        case 'p':
+          p();
+          break;
+        default:
+          printf("\nError! That is an invalid input. Please select one of the options. \n\n");
+      }
     }
 
     //codes to run based on input
@@ -146,7 +142,7 @@ int main() {
 
     //return(0);
   }
-  freeCommand();
+  //freeCommand();
 }
 
 void statistics(){
@@ -227,7 +223,7 @@ void ls(){
   printf("\n-- Directory Listing --\n");
 
   printf("Arguments?:");
-  getchar();
+  //getchar();
   fgets(argInput, 550, stdin);
   if(strcmp("\n",argInput) != 0){
     list[1] = argInput;
@@ -268,9 +264,9 @@ void makeCommand(int num, char *name, char *descrip){
   commandNew->comDescrip = descrip;
   commandNew->next = NULL;
 
+
   if (head == NULL){
     head = commandNew;
-    printf("i was head");
   }
   else {
     struct command *commandTemp;
@@ -278,11 +274,9 @@ void makeCommand(int num, char *name, char *descrip){
     commandTemp = head;
     while (commandTemp->next != NULL){
       commandTemp = commandTemp->next;
-      printf("%s\n", commandTemp->comDescrip);
-      printf("i was here");
     }
     commandTemp->next = commandNew;
-    free(commandTemp);
+    //free(commandTemp);
   }
 }
 
@@ -304,21 +298,62 @@ void a(){
   gettimeofday(&start, NULL);
   char commandInput[540];
   printf("\n-- Add a command --\n");
-  printf("\nCommand to add?:");
+  printf("Command to add?: ");
 
   fgets(commandInput, 520, stdin);
+  strtok(commandInput, "\n");
 
   //add command and increment number of commands
   makeCommand(commandNum,commandInput, "User added command");
   commandNum++;
 
-
-  printf("\nOkay, added with ID __!\n");
+  printf("Okay, added with ID %d!\n", commandNum-1);
 
   gettimeofday(&stop, NULL);
   statistics();
 }
 
+//to run added command
+void addedCommands(int intCommand){
+  gettimeofday(&start, NULL);
+  const char *commandInput;
+
+  //find the right commands
+  struct command *tempCommand;
+  tempCommand = (struct command*)malloc(sizeof(struct command));
+  tempCommand = head;
+
+  int j = 0;
+  while(j < commandNum -1){
+    tempCommand = tempCommand->next;
+    j++;
+  }
+  commandInput = tempCommand->comName;
+  printf("-- Command: %s --\n", commandInput);
+  int pid = fork();
+  const char* thisString = commandInput;
+  char* list [2];
+  printf("-- Command: %s --\n", commandInput);
+  printf("-- Differentttttt Command: %s --\n", tempCommand->comName);
+
+
+  list[0] = thisString;
+  list[1] = NULL;
+  printf("-- Command: %s --\n", commandInput);
+
+    if(pid != 0){
+      wait(&pid);
+      printf("meeueuuuu\n" );
+    }
+    else{
+      execvp(commandInput, list);
+      printf("ahhhhhh\n %s", commandInput );
+    }
+  gettimeofday(&stop, NULL);
+  statistics();
+
+  //free(tempCommand);
+}
 //change directory
 void c(){
   gettimeofday(&start, NULL);
@@ -331,8 +366,9 @@ void c(){
   list[1] = NULL;
 
   printf("\n-- Change Directory --\n");
-  printf("\nNew Directory?: ");
+  printf("New Directory?: ");
   fgets(pathInput, 520, stdin);
+  strtok(pathInput, "\n");
 
   wasSuccess = chdir(pathInput);
 
@@ -357,7 +393,7 @@ void e(){
 void p(){
   gettimeofday(&start, NULL);
   printf("\n-- Current Directory --\n");
-  printf("\nDirectory: ");
+  printf("Directory: ");
   char cwd[MAX];
   if(getcwd(cwd,sizeof(cwd)) != NULL){
     printf("%s\n", cwd);
