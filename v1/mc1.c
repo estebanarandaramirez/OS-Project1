@@ -110,37 +110,6 @@ int main() {
           printf("\nError! That is an invalid input. Please select one of the options. \n\n");
       }
     }
-
-    //codes to run based on input
-    // if(command == '0'){
-    //   whoAmI();
-    // }
-    //
-    // if(command == '1'){
-    //   last();
-    // }
-    //
-    // if(command == '2'){
-    //   ls();
-    // }
-    //
-    // if(command == 'a'){
-    //   a();
-    // }
-    //
-    // if(command == 'c'){
-    //   c();
-    // }
-    //
-    // if(command == 'e'){
-    //   e();
-    // }
-    //
-    // if(command == 'p'){
-    //   p();
-    // }
-
-    //return(0);
   }
   //freeCommand();
 }
@@ -370,6 +339,7 @@ void addedCommands(){
 
   //free(tempCommand);
 }
+
 //change directory
 void c(){
   gettimeofday(&start, NULL);
@@ -377,9 +347,9 @@ void c(){
   int wasSuccess = -1;
   char pathInput[540];
 
-  char* list [2];
-  list[0] = pathInput;
-  list[1] = NULL;
+  // char* list [2];
+  // list[0] = pathInput;
+  // list[1] = NULL;
 
   printf("\n-- Change Directory --\n");
   printf("New Directory?: ");
@@ -398,11 +368,8 @@ void c(){
 
 //exits
 void e(){
-  //gettimeofday(&start, NULL);
   printf("Logging you out, Commander.\n");
   exit(0);
-  //gettimeofday(&stop, NULL);
-  //statistics();
 }
 
 //print directory
