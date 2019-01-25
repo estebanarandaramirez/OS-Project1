@@ -65,8 +65,6 @@ void statistics(){
   getrusage(RUSAGE_CHILDREN, &usage);
   currentFaults = usage.ru_majflt;
   currentReclaims = usage.ru_minflt;
-  printf("%li %li\n", currentFaults, prevFaults);
-  printf("%li %li\n", currentReclaims, prevReclaims);
   if(prevFaults <= currentFaults){
     faults = currentFaults - prevFaults;
   } else {

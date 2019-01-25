@@ -27,6 +27,7 @@ long prevFaults = 0, prevReclaims = 0;
 struct timeval start, stop;
 struct command *head = NULL;
 int commandNum = 3;
+int ples = 0;
 
 struct command {
   int comNum;
@@ -109,6 +110,10 @@ int main() {
         default:
           printf("\nError! That is an invalid input. Please select one of the options. \n\n");
       }
+      // if(ples >= 3){
+      //   return(0);
+      // }
+      // ples++;
     }
   }
   //freeCommand();
@@ -122,8 +127,6 @@ void statistics(){
   getrusage(RUSAGE_CHILDREN, &usage);
   currentFaults = usage.ru_majflt;
   currentReclaims = usage.ru_minflt;
-  printf("%li %li\n", currentFaults, prevFaults);
-  printf("%li %li\n", currentReclaims, prevReclaims);
   if(prevFaults <= currentFaults){
     faults = currentFaults - prevFaults;
   } else {

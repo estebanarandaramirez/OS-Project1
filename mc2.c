@@ -127,8 +127,6 @@ void statistics(){
   getrusage(RUSAGE_CHILDREN, &usage);
   currentFaults = usage.ru_majflt;
   currentReclaims = usage.ru_minflt;
-  printf("%li %li\n", currentFaults, prevFaults);
-  printf("%li %li\n", currentReclaims, prevReclaims);
   if(prevFaults <= currentFaults){
     faults = currentFaults - prevFaults;
   } else {
@@ -338,6 +336,13 @@ void addedCommands(int commandAsInt){
     i++;
   }
   list[79] = NULL;
+
+  char *lastString = list[i-2];
+  char lastChar = lastString[0];
+  printf("%c\n", lastChar);
+  if(lastChar == '&'){
+    printf("IT WORKS\n");
+  }
 
   int status;
   int pid = fork();
