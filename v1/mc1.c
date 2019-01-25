@@ -137,8 +137,8 @@ void statistics(){
   } else {
     reclaims = currentReclaims;
   }
-  prevFaults = faults;
-  prevReclaims = reclaims;
+  prevFaults += faults;
+  prevReclaims += reclaims;
 
   //Calculate elapsed time in milliseconds
   float secs = (float)(stop.tv_sec - start.tv_sec) * 1000;
@@ -282,7 +282,6 @@ void freeCommand(){
 
 //add command
 void a(){
-  gettimeofday(&start, NULL);
   //char commandInput[540];
   char *commandInput;
   commandInput= (char*)malloc(500*sizeof(char));
@@ -299,9 +298,6 @@ void a(){
   commandNum++;
 
   printf("Okay, added with ID %d!\n", commandNum-1);
-
-  gettimeofday(&stop, NULL);
-  statistics();
 }
 
 //to run added command
@@ -357,8 +353,6 @@ void addedCommands(int commandAsInt){
 
 //change directory
 void c(){
-  gettimeofday(&start, NULL);
-
   int wasSuccess = -1;
   char pathInput[540];
 
@@ -370,15 +364,13 @@ void c(){
   printf("New Directory?: ");
   fgets(pathInput, 520, stdin);
   strtok(pathInput, "\n");
+  printf("\n");
 
   wasSuccess = chdir(pathInput);
 
   if (wasSuccess == -1){
     printf("Error, was unable to change directories successfully. \n");
   }
-
-  gettimeofday(&stop, NULL);
-  statistics();
 }
 
 //exits
@@ -389,13 +381,10 @@ void e(){
 
 //print directory
 void p(){
-  gettimeofday(&start, NULL);
   printf("\n-- Current Directory --\n");
   printf("Directory: ");
   char cwd[MAX];
   if(getcwd(cwd,sizeof(cwd)) != NULL){
-    printf("%s\n", cwd);
+    printf("%s\n\n", cwd);
   }
-  gettimeofday(&stop, NULL);
-  statistics();
 }
