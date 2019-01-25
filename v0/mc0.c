@@ -44,17 +44,14 @@ int main(int argc, char *argv[]) {
 
     //codes to run based on input
     if(input == 0){
-      printf("\nOption 0");
       whoAmI();
     }
 
     if(input == 1){
-      printf("\nOption 1");
       last();
     }
 
     if(input == 2){
-      printf("\nOption 2");
       ls();
     }
   }
@@ -62,14 +59,24 @@ int main(int argc, char *argv[]) {
 
 void statistics(){
   struct rusage usage;
-  long faults, reclaims;
+  long faults, reclaims, currentFaults, currentReclaims;
 
   //getrusage statistics
   getrusage(RUSAGE_CHILDREN, &usage);
-  faults = usage.ru_majflt - prevFaults;
-  reclaims = usage.ru_minflt - prevReclaims;
-  prevFaults = usage.ru_majflt;
-  prevReclaims = usage.ru_minflt;
+  currentFaults = usage.ru_majflt;
+  currentReclaims = usage.ru_minflt;
+  if(prevFaults <= currentFaults){
+    faults = currentFaults - prevFaults;
+  } else {
+    faults = currentFaults;
+  }
+  if(prevReclaims <= currentReclaims){
+    reclaims = currentReclaims - prevReclaims;
+  } else {
+    reclaims = currentReclaims;
+  }
+  prevFaults = faults;
+  prevReclaims = reclaims;
 
   //Calculate elapsed time in milliseconds
   float secs = (float)(stop.tv_sec - start.tv_sec) * 1000;
@@ -138,7 +145,7 @@ void ls(){
   printf("\n-- Directory Listing --\n");
 
 
-  printf("Arguments?:");
+  printf("\nArguments?:");
   getchar();
   fgets(argInput, 550, stdin);
   if(strcmp("\n",argInput) != 0){
