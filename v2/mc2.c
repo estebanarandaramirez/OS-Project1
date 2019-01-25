@@ -18,7 +18,7 @@ void p();
 void r();
 void makeCommand(int num, char *name, char *descrip);
 void freeCommand();
-void addedCommands();
+void addedCommands(int commandAsInt);
 
 //Constant
 #define MAX 128 //Max characters
@@ -121,14 +121,24 @@ int main() {
 
 void statistics(){
   struct rusage usage;
-  long faults, reclaims;
+  long faults, reclaims, currentFaults, currentReclaims;
 
   //getrusage statistics
   getrusage(RUSAGE_CHILDREN, &usage);
-  faults = usage.ru_majflt - prevFaults;
-  reclaims = usage.ru_minflt - prevReclaims;
-  prevFaults = usage.ru_majflt;
-  prevReclaims = usage.ru_minflt;
+  currentFaults = usage.ru_majflt;
+  currentReclaims = usage.ru_minflt;
+  if(prevFaults <= currentFaults){
+    faults = currentFaults - prevFaults;
+  } else {
+    faults = currentFaults;
+  }
+  if(prevReclaims <= currentReclaims){
+    reclaims = currentReclaims - prevReclaims;
+  } else {
+    reclaims = currentReclaims;
+  }
+  prevFaults = faults;
+  prevReclaims = reclaims;
 
   //Calculate elapsed time in milliseconds
   float secs = (float)(stop.tv_sec - start.tv_sec) * 1000;
@@ -295,7 +305,7 @@ void a(){
 }
 
 //to run added command
-void addedCommands(){
+void addedCommands(int commandAsInt){
   gettimeofday(&start, NULL);
 
   struct command *tempCommand;
@@ -304,12 +314,12 @@ void addedCommands(){
 
   int j = 0;
 
-  while(j < commandNum -1){
+  while(j < commandNum - (commandNum - commandAsInt)){
     tempCommand = tempCommand->next;
     j++;
   }
 
-  printf("-- Command: %s --\n", tempCommand->comName);
+  printf("\n-- Command: %s --\n", tempCommand->comName);
 
   char *toBeEaten = (char*)malloc(500*sizeof(char));
   toBeEaten = strdup(tempCommand->comName);
@@ -326,6 +336,13 @@ void addedCommands(){
     i++;
   }
   list[79] = NULL;
+
+  char *lastString = list[i-2];
+  char lastChar = lastString[0];
+  printf("%c\n", lastChar);
+  if(lastChar == '&'){
+    printf("IT WORKS\n");
+  }
 
   int status;
   int pid = fork();
