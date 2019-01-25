@@ -1,9 +1,15 @@
 CS 3013: Operating Systems (C19)
 Shreeja Bhattacharjee (sbhattacharjee), Esteban Ramirez (earandaramirez)
-Project 1 (Checkpoint)
+Project 1
 
-This code was written in C. As of right now, it includes the features specified for Phase 1 and Phase 2 (in progress). Phase 1 materials are located in v0 and Phase 2 materials are located in v1.
+This code was written in C. It includes implementatin for all 3 phases. Phase 1 is located in v0, phase 2 is in v1, and phase 3 is in v2.
 
 To run the program go to the directory with the files, and write "make" in the command line to build. Then use "./mc0" to run. Typing "make clean" cleans it up.
 
 To run it with test cases use "./mc0 < test.txt". The text file contains the three possible options and when run like this it automatically tests the different functionalities of mc0.
+
+Assumptions
+
+These are some of the assumptions we made:
+An unlimited number of commands can be added (because we're using a LinkedList).
+However,per command only 79 "words" can be accepted.
