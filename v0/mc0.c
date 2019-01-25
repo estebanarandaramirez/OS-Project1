@@ -75,8 +75,8 @@ void statistics(){
   } else {
     reclaims = currentReclaims;
   }
-  prevFaults = faults;
-  prevReclaims = reclaims;
+  prevFaults += faults;
+  prevReclaims += reclaims;
 
   //Calculate elapsed time in milliseconds
   float secs = (float)(stop.tv_sec - start.tv_sec) * 1000;
