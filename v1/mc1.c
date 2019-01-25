@@ -17,7 +17,7 @@ void e();
 void p();
 void makeCommand(int num, char *name, char *descrip);
 void freeCommand();
-void addedCommands();
+void addedCommands(int commandAsInt);
 
 //Constant
 #define MAX 128 //Max characters
@@ -27,6 +27,7 @@ long prevFaults = 0, prevReclaims = 0;
 struct timeval start, stop;
 struct command *head = NULL;
 int commandNum = 3;
+int ples = 0;
 
 struct command {
   int comNum;
@@ -109,6 +110,10 @@ int main() {
         default:
           printf("\nError! That is an invalid input. Please select one of the options. \n\n");
       }
+      // if(ples >= 3){
+      //   return(0);
+      // }
+      // ples++;
     }
   }
   //freeCommand();
@@ -116,14 +121,24 @@ int main() {
 
 void statistics(){
   struct rusage usage;
-  long faults, reclaims;
+  long faults, reclaims, currentFaults, currentReclaims;
 
   //getrusage statistics
   getrusage(RUSAGE_CHILDREN, &usage);
-  faults = usage.ru_majflt - prevFaults;
-  reclaims = usage.ru_minflt - prevReclaims;
-  prevFaults = usage.ru_majflt;
-  prevReclaims = usage.ru_minflt;
+  currentFaults = usage.ru_majflt;
+  currentReclaims = usage.ru_minflt;
+  if(prevFaults <= currentFaults){
+    faults = currentFaults - prevFaults;
+  } else {
+    faults = currentFaults;
+  }
+  if(prevReclaims <= currentReclaims){
+    reclaims = currentReclaims - prevReclaims;
+  } else {
+    reclaims = currentReclaims;
+  }
+  prevFaults = faults;
+  prevReclaims = reclaims;
 
   //Calculate elapsed time in milliseconds
   float secs = (float)(stop.tv_sec - start.tv_sec) * 1000;
@@ -290,7 +305,7 @@ void a(){
 }
 
 //to run added command
-void addedCommands(){
+void addedCommands(int commandAsInt){
   gettimeofday(&start, NULL);
 
   struct command *tempCommand;
@@ -299,12 +314,12 @@ void addedCommands(){
 
   int j = 0;
 
-  while(j < commandNum -1){
+  while(j < commandNum - (commandNum - commandAsInt)){
     tempCommand = tempCommand->next;
     j++;
   }
 
-  printf("-- Command: %s --\n", tempCommand->comName);
+  printf("\n-- Command: %s --\n", tempCommand->comName);
 
   char *toBeEaten = (char*)malloc(500*sizeof(char));
   toBeEaten = strdup(tempCommand->comName);
