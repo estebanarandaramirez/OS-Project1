@@ -36,6 +36,11 @@ struct command {
   struct command *next;
 };
 
+// struct node {
+//   struct command *runningC;
+//   struct node *next;
+// }
+
 int main() {
   int counter = 0;
   makeCommand(0,"whoami", "Prints out the result of the whoamicommand");
@@ -60,7 +65,6 @@ int main() {
     }
     free(commandTemp);
 
-
     //old statements
     /*
     printf("   %-10s %s", "2. ls", ":");
@@ -72,6 +76,18 @@ int main() {
     printf("   p. pwd : Prints working directory\n");
     printf("   r. running processes : Print list of running processes\n");
     printf("Option?: ");
+
+    int j = 1;
+    while (j == 1) {
+      int result = wait3(NULL, WNOHANG, NULL);
+      if(result > 0){
+        printf("A child has finished\n");
+        statistics();
+      } else {
+        printf("Nothing\n");
+        j++;
+      }
+    }
 
     fgets(input, MAX, stdin);
     counter++;
@@ -127,6 +143,8 @@ void statistics(){
   getrusage(RUSAGE_CHILDREN, &usage);
   currentFaults = usage.ru_majflt;
   currentReclaims = usage.ru_minflt;
+  //printf("%li %li\n", currentFaults, prevFaults);
+  //printf("%li %li\n", currentReclaims, prevReclaims);
   if(prevFaults <= currentFaults){
     faults = currentFaults - prevFaults;
   } else {
@@ -137,8 +155,8 @@ void statistics(){
   } else {
     reclaims = currentReclaims;
   }
-  prevFaults = faults;
-  prevReclaims = reclaims;
+  prevFaults += faults;
+  prevReclaims += reclaims;
 
   //Calculate elapsed time in milliseconds
   float secs = (float)(stop.tv_sec - start.tv_sec) * 1000;
@@ -282,7 +300,6 @@ void freeCommand(){
 
 //add command
 void a(){
-  gettimeofday(&start, NULL);
   //char commandInput[540];
   char *commandInput;
   commandInput= (char*)malloc(500*sizeof(char));
@@ -298,16 +315,13 @@ void a(){
   makeCommand(commandNum,commandInput, "User added command");
   commandNum++;
 
-  printf("Okay, added with ID %d!\n", commandNum-1);
-
-  gettimeofday(&stop, NULL);
-  statistics();
+  printf("Okay, added with ID %d!\n\n", commandNum-1);
 }
 
 //to run added command
 void addedCommands(int commandAsInt){
   gettimeofday(&start, NULL);
-
+  int backgroundCommand = 0;
   struct command *tempCommand;
   //tempCommand = (struct command*)malloc(sizeof(struct command));
   tempCommand = head;
@@ -339,9 +353,11 @@ void addedCommands(int commandAsInt){
 
   char *lastString = list[i-2];
   char lastChar = lastString[0];
-  printf("%c\n", lastChar);
+  //printf("%c\n", lastChar);
   if(lastChar == '&'){
-    printf("IT WORKS\n");
+    list[i-2] = NULL;
+    backgroundCommand = 1;
+    printf("[%d] %d\n\n", 1, tempCommand->comNum);
   }
 
   int status;
@@ -354,7 +370,12 @@ void addedCommands(int commandAsInt){
     execvp(list[0], list);
   }
   else{
-    pid = wait(&status);
+    if(backgroundCommand == 0){
+      pid = wait(&status);
+    } else if(backgroundCommand == 1){
+      gettimeofday(&stop, NULL);
+      return;
+    }
   }
   gettimeofday(&stop, NULL);
   statistics();
@@ -364,8 +385,6 @@ void addedCommands(int commandAsInt){
 
 //change directory
 void c(){
-  gettimeofday(&start, NULL);
-
   int wasSuccess = -1;
   char pathInput[540];
 
@@ -377,15 +396,13 @@ void c(){
   printf("New Directory?: ");
   fgets(pathInput, 520, stdin);
   strtok(pathInput, "\n");
+  printf("\n");
 
   wasSuccess = chdir(pathInput);
 
   if (wasSuccess == -1){
     printf("Error, was unable to change directories successfully. \n");
   }
-
-  gettimeofday(&stop, NULL);
-  statistics();
 }
 
 //exits
@@ -396,21 +413,15 @@ void e(){
 
 //print directory
 void p(){
-  gettimeofday(&start, NULL);
   printf("\n-- Current Directory --\n");
   printf("Directory: ");
   char cwd[MAX];
   if(getcwd(cwd,sizeof(cwd)) != NULL){
-    printf("%s\n", cwd);
+    printf("%s\n\n", cwd);
   }
-  gettimeofday(&stop, NULL);
-  statistics();
 }
 
 //list of running processes
 void r(){
-  gettimeofday(&start, NULL);
   printf("\n-- Background Processes --\n");
-  gettimeofday(&stop, NULL);
-  //statistics();
 }
