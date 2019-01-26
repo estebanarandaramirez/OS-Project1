@@ -2,9 +2,9 @@ CS 3013: Operating Systems (C19)
 Shreeja Bhattacharjee (sbhattacharjee), Esteban Ramirez (earandaramirez)
 Project 1
 
-This code was written in C. It includes implementatin for all 3 phases. Phase 1 is located in v0, phase 2 is in v1, and phase 3 is in v2.
+This code was written in C. It includes implementatin for all 3 phases. Phase 1 is in mc0, phase 2 is in mc1, and phase 3 is in mc2.
 
-To run the program go to the directory with the files, and write "make" in the command line to build. Then use "./mc0" to run. Typing "make clean" cleans it up.
+To run the program go to the directory with the files, and write "make" in the command line to build. Typing either "make" or "make all" will build all three programs. To run phase 1, type "./mc0" next. For phase 2, "./mc1", and for phase 3, "./mc2". To only build one of the programs, type "make mc_" and fill in the space with the corresponding number (0 for phase 1, 1 for phase 2, 2 for phase 3). Then use "./mc0" to run. Typing "make clean" cleans everything (any programs that were built).
 
 To run it with test cases use "./mc0 < test.txt". The text file contains the three possible options and when run like this it automatically tests the different functionalities of mc0.
 
