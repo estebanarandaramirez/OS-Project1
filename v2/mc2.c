@@ -19,6 +19,8 @@ void r();
 void makeCommand(int num, char *name, char *descrip);
 void freeCommand();
 void addedCommands(int commandAsInt);
+void makeTask(int processID);
+void removeTasks(int uniqueID);
 
 //Constant
 #define MAX 128 //Max characters
@@ -28,12 +30,21 @@ long prevFaults = 0, prevReclaims = 0;
 struct timeval start, stop;
 struct command *head = NULL;
 int commandNum = 3;
+struct task *taskHead = NULL;
+int tasksInQueue = 0;
+int uniqueID = 0;
 
 struct command {
   int comNum;
   char *comName;
   char *comDescrip;
   struct command *next;
+};
+
+struct task {
+  int orderNum;
+  int processID;
+  struct task *next;
 };
 
 // struct node {
@@ -282,6 +293,69 @@ void makeCommand(int num, char *name, char *descrip){
     }
     commandTemp->next = commandNew;
     //free(commandTemp);
+  }
+}
+
+void makeTask(int processID){
+  struct task *taskNew;
+  taskNew = (struct task*)malloc(sizeof(struct task));
+  tasksInQueue++;
+  taskNew->orderNum = tasksInQueue;
+  taskNew->processID = processID;
+  taskNew->next = NULL;
+
+  if(taskHead == NULL){
+    taskHead = taskNew;
+  }
+  else{
+    struct task *taskTemp;
+    taskTemp= (struct task*)malloc(sizeof(struct task));
+    taskTemp = taskHead;
+    while (taskTemp->next != NULL){
+      taskTemp = taskTemp->next;
+    }
+    taskTemp->next = taskNew;
+  }
+}
+
+void removeTasks(int processID){
+  if(taskHead == NULL){
+    printf("There are no pending tasks.\n");
+  }
+  else if (taskHead->next == NULL){
+    free(taskHead);
+    taskHead = NULL;
+  }
+  else{
+    struct task *taskTemp;
+    //taskTemp = (struct task*)malloc(sizeof(struct task));
+    taskTemp = taskHead;
+
+    struct task *otherTempTask;
+  //  otherTempTask = (struct task*)malloc(sizeof(struct task));
+    otherTempTask = taskHead;
+
+    //if statement only runs if the first item in the list is not the one we're looking for
+    if(taskHead->processID != processID){
+      while(taskTemp->processID != processID){
+        taskTemp = taskTemp->next;
+        otherTempTask = otherTempTask->next;
+      }
+      taskTemp = taskTemp->next;
+      otherTempTask->next = taskTemp->next;
+    }
+
+    //changes what it means to be head if its head that needs to be removed
+    if(taskHead->processID == processID){
+      taskHead = taskHead->next;
+    }
+
+    free(taskTemp);
+
+    while(otherTempTask->orderNum < tasksInQueue){
+      otherTempTask->orderNum--;
+    }
+    tasksInQueue--;
   }
 }
 
