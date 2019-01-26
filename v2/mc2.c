@@ -88,14 +88,17 @@ int main() {
     printf("   r. running processes : Print list of running processes\n");
     printf("Option?: ");
 
+    int status;
     int j = 1;
     while (j == 1) {
-      int result = wait3(NULL, WNOHANG, NULL);
-      if(result > 0){
-        printf("A child has finished\n");
+      int pid = waitpid(-1, &status, WNOHANG);
+      if(pid > 0){
+        //printf("A child has finished\n");
+        printf("\nacabou\n");
         statistics();
+        removeTasks(pid);
       } else {
-        printf("Nothing\n");
+        //printf("Nothing\n");
         j++;
       }
     }
@@ -299,7 +302,7 @@ void makeCommand(int num, char *name, char *descrip){
 void makeTask(int processID){
   struct task *taskNew;
   taskNew = (struct task*)malloc(sizeof(struct task));
-  tasksInQueue++;
+  //tasksInQueue++;
   taskNew->orderNum = tasksInQueue;
   taskNew->processID = processID;
   taskNew->next = NULL;
@@ -431,7 +434,6 @@ void addedCommands(int commandAsInt){
   if(lastChar == '&'){
     list[i-2] = NULL;
     backgroundCommand = 1;
-    printf("[%d] %d\n\n", 1, tempCommand->comNum);
   }
 
   int status;
@@ -447,6 +449,15 @@ void addedCommands(int commandAsInt){
     if(backgroundCommand == 0){
       pid = wait(&status);
     } else if(backgroundCommand == 1){
+      int result;
+      result = waitpid(-1,&status,WNOHANG);
+      pid = getpid();
+      if(result>0){
+        pid = result;
+      }
+      tasksInQueue++;
+      printf("[%d] %d\n\n", tasksInQueue, pid);
+      makeTask(pid);
       gettimeofday(&stop, NULL);
       return;
     }
@@ -498,4 +509,20 @@ void p(){
 //list of running processes
 void r(){
   printf("\n-- Background Processes --\n");
+  struct task *taskTemp;
+  //taskTemp = (struct task*)malloc(sizeof(struct task));
+  // taskTemp->orderNum = taskHead->orderNum;
+  // taskTemp->processID = taskHead->processID;
+  // taskTemp->next = taskHead->next;
+  taskTemp = taskHead;
+  while (taskTemp != NULL && taskTemp->next != NULL) {
+    printf("[%d] Process ID: %d\n", taskTemp->orderNum, taskTemp->processID);
+    struct task *taskLoop;
+    taskLoop = taskTemp;
+    taskTemp = taskLoop->next;
+  }
+  if(taskTemp != NULL){
+    printf("[%d] Process ID: %d\n", taskTemp->orderNum, taskTemp->processID);
+  }
+  printf("\n");
 }
