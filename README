@@ -14,6 +14,8 @@ To run it with test cases use the programs name followed by < test.txt, when ini
 Example: "./mc0 < test.txt"
 Doing this will run the program automatically testing it with the inputs from the txt file.
 
+To keep track of the background processes running in mc2, the data structure we used was a linked list.
+
 Assumptions
 
 These are some of the assumptions we made:
